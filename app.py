@@ -281,6 +281,10 @@ with tab_search:
                 unload_model(vision_model)
                 my_bar.empty()
                 st.toast("所有分析完成！VRAM 已釋放。", icon="🧹")
+            else:
+                # 當搜尋結果為空或 API 回傳空陣列時顯示
+                st.warning(f"查無結果：在指定時間內找不到包含「{q_text}」的紀錄。")
+                st.info("💡 建議：\n1. 檢查關鍵字拼字是否正確\n2. 擴大時間過濾器的範圍\n3. 確認 Screenpipe 服務是否正在運行")
 
 # ================= Tab 2: 回顧（改為二階段搜尋 + 摘要置頂） =================
 with tab_recap:
