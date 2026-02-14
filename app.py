@@ -288,11 +288,19 @@ with tab_search:
 
 # ================= Tab 2: 回顧（改為二階段搜尋 + 摘要置頂） =================
 with tab_recap:
+    # 1. 初始化結束時間，只在第一次載入時設定為「現在」
+    if "recap_end_time" not in st.session_state:
+        st.session_state.recap_end_time = datetime.now().time()
+    
     st.info("設定時間範圍，AI 將自動抽樣並生成工作摘要。第一階段只撈 metadata（無圖片），降低超時風險。")
     r_col1, r_col2, r_col3, r_col4 = st.columns(4)
     r_date = r_col1.date_input("日期", datetime.now())
     r_start = r_col2.time_input("開始", datetime.strptime("09:00", "%H:%M").time())
-    r_end = r_col3.time_input("結束", datetime.now().time())
+    r_end = r_col3.time_input(
+        "結束", 
+        value=st.session_state.recap_end_time, 
+        key="recap_time_input"
+    )
     r_samples = r_col4.slider("採樣數", 3, 20, 5)
     window_seconds = st.number_input("每張抓圖時窗（秒, ±）", 1, 30, 5)
     stage1_limit = st.number_input("第一階段最多筆數 (metadata)", 50, 2000, 500)
